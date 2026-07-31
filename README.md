@@ -1,4 +1,4 @@
-# Hearth & Crumb
+# Macey’s Country Bakery
 
 Production-oriented Next.js App Router storefront and admin for a small collection-only bakery. It uses Supabase Auth, Postgres and Storage, plus verified Stripe Checkout webhooks.
 
