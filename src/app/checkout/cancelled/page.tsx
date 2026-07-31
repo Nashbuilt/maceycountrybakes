@@ -1,0 +1,1 @@
+import Link from"next/link";export default function Cancelled(){return<section className="shell max-w-xl py-24 text-center"><h1 className="font-serif text-6xl">Checkout paused</h1><p className="mt-5">Nothing was charged and your basket is still waiting for you.</p><Link className="button mt-7" href="/basket">Return to basket</Link></section>}

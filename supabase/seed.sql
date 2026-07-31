@@ -1,0 +1,5 @@
+insert into public.products(id,category_id,name,slug,short_description,description,price_pence,stock,is_visible,is_available,sort_order)
+select '11111111-1111-1111-1111-111111111111',id,'Classic buttermilk scones','classic-buttermilk-scones','Tender, tall and baked with cultured buttermilk.','Our signature scones: crisp at the edges, cloud-soft within, and finished with a light brush of cream.',1450,18,true,true,1 from public.categories where slug='scones';
+insert into public.products(id,category_id,name,slug,short_description,description,price_pence,stock,is_visible,is_available,sort_order)
+select '22222222-2222-2222-2222-222222222222',id,'Dark chocolate banana bread','dark-chocolate-banana-bread','Deeply caramelised banana with pools of dark chocolate.','A generous loaf made with ripe bananas, dark muscovado sugar and 70% chocolate.',1200,9,true,true,1 from public.categories where slug='loaves';
+insert into public.collection_slots(starts_at,ends_at,capacity) values(now()+interval '3 days',now()+interval '3 days 30 minutes',8),(now()+interval '4 days',now()+interval '4 days 30 minutes',8);

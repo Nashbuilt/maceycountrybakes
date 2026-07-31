@@ -1,0 +1,2 @@
+"use client";import{Product}from"@/lib/types";import{useCart}from"./cart-provider";import{useState}from"react";
+export function AddToBasket({product}:{product:Product}){const{add}=useCart();const[done,setDone]=useState(false);return<button disabled={!product.is_available||product.stock<1} className="button w-full sm:w-auto" onClick={()=>{add(product);setDone(true);setTimeout(()=>setDone(false),1800)}}>{!product.is_available||product.stock<1?"Unavailable":done?"Added to basket":"Add to basket"}</button>}
