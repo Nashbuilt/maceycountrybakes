@@ -19,8 +19,8 @@ const sans = Manrope({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: {
-    default: "Hearth & Crumb | Small-batch bakery",
-    template: "%s | Hearth & Crumb",
+    default: "Macey’s Country Bakery | Small-batch bakes",
+    template: "%s | Macey’s Country Bakery",
   },
   description: "Small-batch scones, banana bread and seasonal bakes, handmade for local collection.",
 };
@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <footer className="mt-24 border-t border-cocoa/10 bg-cocoa text-cream">
             <div className="shell grid gap-10 py-14 md:grid-cols-3">
               <div>
-                <p className="font-serif text-3xl">Hearth & Crumb</p>
+                <p className="font-serif text-3xl">Macey’s Country Bakery</p>
                 <p className="mt-3 max-w-xs text-sm text-cream/70">Small-batch baking, made by hand and ready for your table.</p>
               </div>
               <div>
