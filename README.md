@@ -4,12 +4,14 @@ Production-oriented Next.js App Router storefront and admin for a small collecti
 
 ## Local setup
 
-1. Create a Supabase project and run `supabase/migrations/0001_initial.sql`, then `supabase/seed.sql` in the SQL editor.
+1. Create a Supabase project and run every SQL file in `supabase/migrations/` in filename order, then run `supabase/seed.sql` in the SQL editor.
 2. In Authentication, create the bakery owner account. Promote it once in SQL: `update public.profiles set role='admin' where id='<auth-user-uuid>';`.
 3. Confirm the `product-images` bucket and its policies were created by the migration.
 4. Create a Stripe account and obtain test API keys. Add a webhook endpoint at `https://YOUR_DOMAIN/api/stripe/webhook` for `checkout.session.completed` and `checkout.session.expired`.
 5. Copy `.env.example` to `.env.local` and fill every required value. Never prefix service-role or Stripe secret values with `NEXT_PUBLIC_`.
 6. Run `npm install` and `npm run dev`.
+
+For an existing Supabase project, run only migrations that have not already been applied. `0002_maceys_pricing.sql` adds the current treat box, cupcake, banana-loaf and dinner-roll prices safely and can be rerun.
 
 ## Stripe testing
 
