@@ -1,4 +1,88 @@
-"use client";import{createContext,useContext,useEffect,useMemo,useState}from"react";import{CartItem,Product}from"@/lib/types";
-type Value={items:CartItem[];count:number;total:number;add:(p:Product)=>void;remove:(id:string)=>void;setQuantity:(id:string,q:number)=>void;clear:()=>void};const C=createContext<Value|null>(null);
-export function CartProvider({children}:{children:React.ReactNode}){const[items,setItems]=useState<CartItem[]>([]),[ready,setReady]=useState(false);useEffect(()=>{try{setItems(JSON.parse(localStorage.getItem("maceys-country-bakery-cart")||"[]"))}finally{setReady(true)}},[]);useEffect(()=>{if(ready)localStorage.setItem("maceys-country-bakery-cart",JSON.stringify(items))},[items,ready]);const value=useMemo(()=>({items,count:items.reduce((n,i)=>n+i.quantity,0),total:items.reduce((n,i)=>n+i.price_pence*i.quantity,0),add:(p:Product)=>setItems(v=>v.some(i=>i.id===p.id)?v.map(i=>i.id===p.id?{...i,quantity:i.quantity+1}:i):[...v,{id:p.id,slug:p.slug,name:p.name,price_pence:p.price_pence,image_url:p.image_url,quantity:1}]),remove:(id:string)=>setItems(v=>v.filter(i=>i.id!==id)),setQuantity:(id:string,q:number)=>setItems(v=>q<1?v.filter(i=>i.id!==id):v.map(i=>i.id===id?{...i,quantity:Math.min(q,20)}:i)),clear:()=>setItems([])}),[items]);return<C.Provider value={value}>{children}</C.Provider>}
-export function useCart(){const v=useContext(C);if(!v)throw new Error("useCart outside provider");return v}
+"use client";
+
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { hasKnownPrice } from "@/lib/catalogue";
+import type { CartItem, Product } from "@/lib/types";
+
+type Value = {
+  items: CartItem[];
+  count: number;
+  total: number;
+  add: (product: Product) => void;
+  remove: (id: string) => void;
+  setQuantity: (id: string, quantity: number) => void;
+  clear: () => void;
+};
+
+const CartContext = createContext<Value | null>(null);
+
+export function CartProvider({ children }: { children: React.ReactNode }) {
+  const [items, setItems] = useState<CartItem[]>([]);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const hydrationTimer = window.setTimeout(() => {
+      try {
+        const stored = JSON.parse(localStorage.getItem("maceys-country-bakery-cart") || "[]") as CartItem[];
+        setItems(stored.filter(hasKnownPrice));
+      } catch {
+        setItems([]);
+      } finally {
+        setReady(true);
+      }
+    }, 0);
+
+    return () => window.clearTimeout(hydrationTimer);
+  }, []);
+
+  useEffect(() => {
+    if (ready) localStorage.setItem("maceys-country-bakery-cart", JSON.stringify(items));
+  }, [items, ready]);
+
+  const value = useMemo(
+    () => ({
+      items,
+      count: items.reduce((total, item) => total + item.quantity, 0),
+      total: items.reduce((total, item) => total + item.price_pence * item.quantity, 0),
+      add: (product: Product) => {
+        if (!hasKnownPrice(product)) return;
+        setItems((current) =>
+          current.some((item) => item.id === product.id)
+            ? current.map((item) =>
+                item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item,
+              )
+            : [
+                ...current,
+                {
+                  id: product.id,
+                  slug: product.slug,
+                  name: product.name,
+                  price_pence: product.price_pence,
+                  image_url: product.image_url,
+                  quantity: 1,
+                },
+              ],
+        );
+      },
+      remove: (id: string) => setItems((current) => current.filter((item) => item.id !== id)),
+      setQuantity: (id: string, quantity: number) =>
+        setItems((current) =>
+          quantity < 1
+            ? current.filter((item) => item.id !== id)
+            : current.map((item) =>
+                item.id === id ? { ...item, quantity: Math.min(quantity, 20) } : item,
+              ),
+        ),
+      clear: () => setItems([]),
+    }),
+    [items],
+  );
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+}
+
+export function useCart() {
+  const value = useContext(CartContext);
+  if (!value) throw new Error("useCart must be used within CartProvider");
+  return value;
+}
