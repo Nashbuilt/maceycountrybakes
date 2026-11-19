@@ -45,6 +45,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </div>
               <div className="flex gap-5 text-sm">
                 <Link href="/contact">Contact</Link>
+                <a
+                  href="https://www.facebook.com/profile.php?id=61590544206469"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Facebook
+                </a>
                 <Link href="/admin/login">Admin</Link>
               </div>
             </div>
