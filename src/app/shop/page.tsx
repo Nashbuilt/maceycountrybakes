@@ -94,8 +94,8 @@ export default async function Shop() {
         </div>
         <div className="relative aspect-[4/5] overflow-hidden bg-oat">
           <Image
-            src="/images/maceys-packaged-scones.png"
-            alt="Handmade scones individually wrapped in bakery bags"
+            src="/images/maceys-scone-with-tea.jpeg"
+            alt="A homemade scone served with cream and jam beside a cup of tea"
             fill
             className="object-cover"
             sizes="(max-width: 640px) 100vw, 50vw"
